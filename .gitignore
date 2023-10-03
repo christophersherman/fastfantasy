@@ -1,0 +1,5 @@
+.cache
+obj/
+fastfantasy
+config.conf
+compile_commands.json
