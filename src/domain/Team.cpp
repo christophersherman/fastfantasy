@@ -31,3 +31,6 @@ Team::Team(const std::string& name, const std::string& id)
 }
 
 // Implementations of other methods would go here...
+    std::string Team::getTeamName() {
+        return this->team_name;
+    }

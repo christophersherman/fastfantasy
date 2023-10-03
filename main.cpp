@@ -4,7 +4,7 @@
 #include <map>
 #include <utility>
 #include <fstream> 
-
+#include "repository/TeamRepository.hpp"
 
 std::map<std::string, std::string> loadConfig(const std::string& filename) {
   std::map<std::string, std::string> config;
@@ -23,8 +23,7 @@ std::map<std::string, std::string> loadConfig(const std::string& filename) {
 
 int main() {
   auto config = loadConfig("config.conf");
-  std::cout << config["URL"] << std::endl;
-  ApiCaller api_caller_instance(config["URL"], config["KEY"]);
-  std::cout << api_caller_instance.getRawTeams();
+  TeamRepository teamRepo(config["URL"], config["KEY"]);
+  teamRepo.loadTeamFromRawData(); 
   return 0;
 }

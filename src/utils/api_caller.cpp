@@ -1,5 +1,5 @@
 #include "utils/api_caller.hpp"
-#include <bits/chrono.h>
+#include <chrono>
 #include <cpr/parameters.h>
 #include <cpr/response.h>
 #include <chrono> 
@@ -50,6 +50,13 @@ json ApiCaller::getRawTeams() {
     return makeRequest("getNFLTeams"); 
 }
 
-json ApiCaller::getRawTeamsRoster(const std::string& teamId) {
+json ApiCaller::getRawTeamsRoster(const std::string& team_id) {
+    /*
+    teamID: '6',
+    teamAbv: 'CHI',
+    getStats: 'true'
+    */
+
+    
     return NULL;
 }
