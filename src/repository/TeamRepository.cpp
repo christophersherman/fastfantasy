@@ -1,9 +1,4 @@
 #include "repository/TeamRepository.hpp"
-#include "nlohmann/json_fwd.hpp"
-#include "utils/api_caller.hpp"
-#include <nlohmann/json.hpp>
-#include <iostream>
-#include "spdlog/spdlog.h"
 
 TeamRepository::TeamRepository(const std::string& url, const std::string& key)
     : api_caller(url, key)
@@ -33,22 +28,43 @@ void TeamRepository::loadTeamFromRawData() {
     }
 }
 
-Team TeamRepository::getTeamByCity(const std::string &city_name) const {
-    for (const Team& t : teams ) {
+Team TeamRepository::getTeamByCity(const std::string& city_name) const {
+    for (const Team& t : this->teams ) {
         if (t.getTeamCity() == city_name) {
             return t;
-        } else {
-            spdlog::error("Team with city name {} not found in teamsRepository", city_name);
-        }
+        } 
     }
+    spdlog::error("Team with city name {} not found in teamsRepository", city_name);
+    throw std::runtime_error("Team not found");
+    // c++17 can do optional<Team> like in spring boot... can return std::nullopt in that case.
 }
 
-Team TeamRepository::getTeamById(const std::string &team_id) const {
-    for (const Team& t : teams ) {
+Team TeamRepository::getTeamById(const std::string& team_id) const {
+    for (const Team& t : this->teams ) {
         if (t.getTeamId() == team_id) {
             return t;
-        } else {
-            spdlog::error("Team with ID {} not found in teamsRepository", team_id);
         }
     }
+    spdlog::error("Team with ID {} not found in teamsRepository", team_id);
+    throw std::runtime_error("Team not found");
+}
+
+Team TeamRepository::getTeamByAbbrev(const std::string& team_abbrev) const {
+    for (const Team& t : this->teams) {
+        if (t.getTeamAbbrev() == team_abbrev) {
+            return t;
+        }
+    }
+    spdlog::error("Team with abbrev {} not found in teamsRepository", team_abbrev);
+    throw std::runtime_error("Team not found");
+}
+
+Team TeamRepository::getTeamByName(const std::string& team_name) const {
+    for (const Team& t : this->teams) {
+        if (t.getTeamName() == team_name) {
+            return t;
+        }
+    }
+    spdlog::error("Team with name {} not found in teamsRepository", team_name);
+    throw std::runtime_error("Team not found");
 }

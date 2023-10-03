@@ -31,6 +31,18 @@ Team::Team(const std::string& name, const std::string& id)
 }
 
 // Implementations of other methods would go here...
-    std::string Team::getTeamName() const {
-        return this->team_name;
-    }
+std::string Team::getTeamName() const {
+    return this->team_name;
+}
+
+std::string Team::getTeamId() const { 
+    return this->team_id;
+}
+
+std::string Team::getTeamAbbrev() const {
+    return this->team_abbrev;
+}
+
+std::string Team::getTeamCity() const {
+    return this->team_city;
+}
