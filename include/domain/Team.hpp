@@ -17,8 +17,8 @@ public:
     Team(const std::string& name, const std::string& id);
 
     // Getters, setters, and other method declarations would go here...
-    std::string getTeamName();
-    std::string getTeamId();
-    std::string getTeamCity();
-    std::string getTeamAbbrev();
+    std::string getTeamName() const;
+    std::string getTeamId() const;
+    std::string getTeamCity() const;
+    std::string getTeamAbbrev() const;
 };

@@ -31,5 +31,24 @@ void TeamRepository::loadTeamFromRawData() {
     } else {
         spdlog::error("Response body not present or not array");
     }
-    std::cout << this->teams.size() << std::endl;
+}
+
+Team TeamRepository::getTeamByCity(const std::string &city_name) const {
+    for (const Team& t : teams ) {
+        if (t.getTeamCity() == city_name) {
+            return t;
+        } else {
+            spdlog::error("Team with city name {} not found in teamsRepository", city_name);
+        }
+    }
+}
+
+Team TeamRepository::getTeamById(const std::string &team_id) const {
+    for (const Team& t : teams ) {
+        if (t.getTeamId() == team_id) {
+            return t;
+        } else {
+            spdlog::error("Team with ID {} not found in teamsRepository", team_id);
+        }
+    }
 }
