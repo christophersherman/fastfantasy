@@ -23,6 +23,7 @@ public:
     ApiCaller(const std::string& host, const std::string& key);
     
     json getRawTeams();
-    json getRawTeamsRoster(const std::string& teamId);
     json getRawDailyMatchs(const std::string& date);
+    json getRawTeamsRosterById(const std::string& teamId);
+    json getRawTeamsRosterByAbbrev(const std::string& team_abbrev);
 };

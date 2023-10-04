@@ -3,7 +3,6 @@
 // Constructors
 Player::Player(const std::string& name)
     : name(name)
-    , fantasy_points(0.0f)
     , jersey_num(0)
     , position("")
     , team_name("")
@@ -11,9 +10,8 @@ Player::Player(const std::string& name)
 {
 }
 
-Player::Player(const std::string& name, float fantasy_points, int jersey_num, const std::string& position, const std::string& team_name, int age)
+Player::Player(const std::string& name, int jersey_num, const std::string& position, const std::string& team_name, int age)
     : name(name)
-    , fantasy_points(fantasy_points)
     , jersey_num(jersey_num)
     , position(position)
     , team_name(team_name)
@@ -25,11 +23,6 @@ Player::Player(const std::string& name, float fantasy_points, int jersey_num, co
 void Player::setName(const std::string& name)
 {
     this->name = name;
-}
-
-void Player::setFantasyPoints(float fantasy_points)
-{
-    this->fantasy_points = fantasy_points;
 }
 
 void Player::setJerseyNumber(int jersey_num)
@@ -68,10 +61,6 @@ std::string Player::getTeamName() const
     return team_name;
 }
 
-float Player::getFantasyPoints() const
-{
-    return fantasy_points;
-}
 
 int Player::getJerseyNumber() const
 {

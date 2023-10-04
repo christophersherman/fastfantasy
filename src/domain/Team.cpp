@@ -5,6 +5,7 @@ Team::Team()
     , team_id("")
     , team_city("")
     , team_abbrev("")
+    , roster()
 {
 }
 
@@ -28,6 +29,9 @@ Team::Team(const std::string& name, const std::string& id)
     , team_city("")
     , team_abbrev("")
 {
+}
+void Team::addPlayerToRoster(Player& p){
+    this->roster.push_back(p);
 }
 
 // Implementations of other methods would go here...

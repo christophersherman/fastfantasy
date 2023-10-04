@@ -24,6 +24,9 @@ std::map<std::string, std::string> loadConfig(const std::string& filename) {
 int main() {
   auto config = loadConfig("config.conf");
   TeamRepository teamRepo(config["URL"], config["KEY"]);
-  teamRepo.loadTeamFromRawData(); 
+  teamRepo.loadTeamFromRawData();
+  Team tester = teamRepo.getTeamByAbbrev("KC"); 
+  teamRepo.loadTeamRosterFromRawData(tester);
+   
   return 0;
 }

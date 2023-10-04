@@ -1,4 +1,7 @@
 #include "repository/TeamRepository.hpp"
+#include "domain/Team.hpp"
+#include <spdlog/spdlog.h>
+#include <string>
 
 TeamRepository::TeamRepository(const std::string& url, const std::string& key)
     : api_caller(url, key)
@@ -26,6 +29,38 @@ void TeamRepository::loadTeamFromRawData() {
     } else {
         spdlog::error("Response body not present or not array");
     }
+}
+
+void TeamRepository::loadTeamRosterFromRawData(Team& team) {
+    nlohmann::json response = this->api_caller.getRawTeamsRosterByAbbrev(team.getTeamAbbrev());
+    std::cout << response << std::endl;    
+    if (response.contains("body") && response["body"].contains("roster") && response["body"]["roster"].is_array()){
+        for(const auto& auto_team: response["body"]["roster"]){
+                /*
+                    name
+                    jersey_num
+                    position
+                    team_name
+                    age 
+                */
+            if (auto_team.contains("longName") && auto_team["longName"].is_string()
+                && auto_team.contains("jerseyNum") && auto_team["jerseyNum"].is_string()
+                && auto_team.contains("team") && auto_team["team"].is_string()
+                && auto_team.contains("pos") && auto_team["pos"].is_string()
+                && auto_team.contains("age") && auto_team["age"].is_string()) {
+                
+                Player p(auto_team["longName"], std::stoi(auto_team["jerseyNum"].get<std::string>()), auto_team["pos"], auto_team["team"], std::stoi(auto_team["age"].get<std::string>()));
+                team.addPlayerToRoster(p);
+                
+                spdlog::info("Player {} loaded into Team Roster", p.getName());
+            
+            } else {
+                spdlog::error("Unexpected Team Roster data");
+            }
+        }
+    } else {
+        spdlog::error("Response body not present or not array");
+    }  
 }
 
 Team TeamRepository::getTeamByCity(const std::string& city_name) const {

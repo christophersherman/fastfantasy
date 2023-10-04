@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "domain/Player.hpp"
 
 class Team {
 private:
@@ -9,8 +10,10 @@ private:
     std::string team_id;
     std::string team_city;
     std::string team_abbrev;
+    std::vector<Player> roster;
 
 public:
+ 
     Team();
     Team(const std::string& team_name);
     Team(const std::string& name, const std::string& id, const std::string& city, const std::string& abbrev);
@@ -21,4 +24,5 @@ public:
     std::string getTeamId() const;
     std::string getTeamCity() const;
     std::string getTeamAbbrev() const;
+    void addPlayerToRoster(Player& p);
 };

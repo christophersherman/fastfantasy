@@ -4,6 +4,7 @@
 #include <cpr/response.h>
 #include <chrono> 
 #include <iostream> 
+#include <string_view>
 #include "spdlog/spdlog.h"
 
 ApiCaller::ApiCaller(const std::string& host, const std::string& key)
@@ -50,13 +51,30 @@ json ApiCaller::getRawTeams() {
     return makeRequest("getNFLTeams"); 
 }
 
-json ApiCaller::getRawTeamsRoster(const std::string& team_id) {
+json ApiCaller::getRawTeamsRosterById(const std::string& team_id) {
     /*
+    optional params. looks like you only need teamID OR teamAbv.
     teamID: '6',
     teamAbv: 'CHI',
     getStats: 'true'
+    archiveDate: xxx 
     */
 
+    std::map<std::string, std::string> params;
+    params.insert({"teamID", team_id});
+    return makeRequest("getNFLTeamRoster", params);
+}
+
+json ApiCaller::getRawTeamsRosterByAbbrev(const std::string& team_abbrev) {
+    /*
+    optional params. looks like you only need teamID OR teamAbv.
+    teamID: '6',
+    teamAbv: 'CHI',
+    getStats: 'true'
+    archiveDate: xxx 
+    */
     
-    return NULL;
+    std::map<std::string, std::string> params;
+    params.insert({"teamAbv", team_abbrev});
+    return makeRequest("getNFLTeamRoster", params);
 }
