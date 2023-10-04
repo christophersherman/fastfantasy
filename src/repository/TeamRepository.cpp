@@ -2,10 +2,15 @@
 #include "domain/Team.hpp"
 #include <spdlog/spdlog.h>
 #include <string>
+#include <vector>
 
 TeamRepository::TeamRepository(const std::string& url, const std::string& key)
     : api_caller(url, key)
     {}
+
+const std::vector<Team> TeamRepository::getTeams() const {
+    return this->teams;
+}
 
 void TeamRepository::loadTeamFromRawData() {
     nlohmann::json response = this->api_caller.getRawTeams();
@@ -49,9 +54,13 @@ void TeamRepository::loadTeamRosterFromRawData(Team& team) {
                 && auto_team.contains("pos") && auto_team["pos"].is_string()
                 && auto_team.contains("age") && auto_team["age"].is_string()) {
                 
-                Player p(auto_team["longName"], std::stoi(auto_team["jerseyNum"].get<std::string>()), auto_team["pos"], auto_team["team"], std::stoi(auto_team["age"].get<std::string>()));
+                //i need a helper function to safely convert since the string can be empty for random punters or something
+                int jerseyNum = api_caller.safeStringToInt(auto_team["jerseyNum"].get<std::string>());
+                int age = api_caller.safeStringToInt(auto_team["age"].get<std::string>());
+
+                Player p(auto_team["longName"], jerseyNum, auto_team["pos"], auto_team["team"], age);
                 team.addPlayerToRoster(p);
-                
+
                 spdlog::info("Player {} loaded into Team Roster", p.getName());
             
             } else {

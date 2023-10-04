@@ -78,3 +78,11 @@ json ApiCaller::getRawTeamsRosterByAbbrev(const std::string& team_abbrev) {
     params.insert({"teamAbv", team_abbrev});
     return makeRequest("getNFLTeamRoster", params);
 }
+
+int ApiCaller::safeStringToInt(const std::string& str, int defaultValue) {
+    try {
+        return std::stoi(str);
+    } catch (const std::invalid_argument& e) {
+        return defaultValue;
+    }
+}

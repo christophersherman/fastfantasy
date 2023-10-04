@@ -25,8 +25,10 @@ int main() {
   auto config = loadConfig("config.conf");
   TeamRepository teamRepo(config["URL"], config["KEY"]);
   teamRepo.loadTeamFromRawData();
-  Team tester = teamRepo.getTeamByAbbrev("KC"); 
-  teamRepo.loadTeamRosterFromRawData(tester);
-   
+
+  for (auto bot : teamRepo.getTeams()) {
+    teamRepo.loadTeamRosterFromRawData(bot);
+  } 
+
   return 0;
 }

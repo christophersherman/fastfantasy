@@ -19,6 +19,7 @@ public:
     TeamRepository(const std::string& url, const std::string& key);
     void loadTeamFromRawData();
     void loadTeamRosterFromRawData(Team& team); 
+    const std::vector<Team> getTeams() const; 
     Team getTeamByCity(const std::string& city_name) const;
     Team getTeamById(const std::string& city_id) const;
     Team getTeamByAbbrev(const std::string& team_abbrev) const;

@@ -21,7 +21,7 @@ private:
 public:
     ApiCaller(const std::string& configPath);
     ApiCaller(const std::string& host, const std::string& key);
-    
+    int safeStringToInt(const std::string& str, int defaultValue = -1);
     json getRawTeams();
     json getRawDailyMatchs(const std::string& date);
     json getRawTeamsRosterById(const std::string& teamId);
