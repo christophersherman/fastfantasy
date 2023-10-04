@@ -13,7 +13,7 @@ ApiCaller::ApiCaller(const std::string& host, const std::string& key)
 {
 }
 
-json ApiCaller::makeRequest(const std::string& endpoint, const std::map<std::string, std::string>& params)
+json ApiCaller::makeRequest(const std::string& endpoint, const std::map<std::string, std::string>& params) const
 {
 
     //iterate over the params map and populate cpr with its contents
@@ -42,16 +42,16 @@ json ApiCaller::makeRequest(const std::string& endpoint, const std::map<std::str
     }
 }
 
-json ApiCaller::makeRequest(const std::string& endpoint) {
+json ApiCaller::makeRequest(const std::string& endpoint) const {
     std::map<std::string, std::string> empty_params;
-    return makeRequest(endpoint, empty_params);
+    return this->makeRequest(endpoint, empty_params);
 }
 
-json ApiCaller::getRawTeams() {
-    return makeRequest("getNFLTeams"); 
+json ApiCaller::getRawTeams() const {
+    return this->makeRequest("getNFLTeams"); 
 }
 
-json ApiCaller::getRawTeamsRosterById(const std::string& team_id) {
+json ApiCaller::getRawTeamsRosterById(const std::string& team_id) const {
     /*
     optional params. looks like you only need teamID OR teamAbv.
     teamID: '6',
@@ -62,10 +62,10 @@ json ApiCaller::getRawTeamsRosterById(const std::string& team_id) {
 
     std::map<std::string, std::string> params;
     params.insert({"teamID", team_id});
-    return makeRequest("getNFLTeamRoster", params);
+    return this->makeRequest("getNFLTeamRoster", params);
 }
 
-json ApiCaller::getRawTeamsRosterByAbbrev(const std::string& team_abbrev) {
+json ApiCaller::getRawTeamsRosterByAbbrev(const std::string& team_abbrev) const {
     /*
     optional params. looks like you only need teamID OR teamAbv.
     teamID: '6',
@@ -76,13 +76,48 @@ json ApiCaller::getRawTeamsRosterByAbbrev(const std::string& team_abbrev) {
     
     std::map<std::string, std::string> params;
     params.insert({"teamAbv", team_abbrev});
-    return makeRequest("getNFLTeamRoster", params);
+    return this->makeRequest("getNFLTeamRoster", params);
 }
 
-int ApiCaller::safeStringToInt(const std::string& str, int defaultValue) {
+json ApiCaller::getRawDailyMatches(const std::string& date) const {
+    std::map<std::string, std::string> params;
+    params.insert({"gameDate", date});
+    return this->makeRequest("getNFLGamesForDate", params);
+}
+
+int ApiCaller::safeStringToInt(const std::string& str, int defaultValue) const {
     try {
         return std::stoi(str);
     } catch (const std::invalid_argument& e) {
         return defaultValue;
     }
 }
+
+//todo re-write me 
+std::string ApiCaller::getTodaysDate() const {
+    using namespace std::chrono;
+
+    // Hardcoded UTC offset in seconds for New York's standard time
+    int offset = -18000;  // For UTC-5
+
+    // Get current UTC time
+    auto now = system_clock::now();
+    
+    // Adjust the current time for New York's offset
+    auto newYorkTime = now + seconds(offset);
+
+    // Convert time_point to tm
+    std::time_t time_t_val = system_clock::to_time_t(newYorkTime);
+    std::tm* tm_val = std::gmtime(&time_t_val); 
+
+    // Format date
+    char buf[9];
+    if (std::strftime(buf, sizeof(buf), "%Y%m%d", tm_val) == 0) {
+        // Date formatting failed
+        std::cerr << "Date formatting failed." << std::endl;
+        return "";
+    }
+    
+    return std::string(buf);
+}
+ 

@@ -7,7 +7,12 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
-#include <map> 
+#include <map>
+#include <sstream> 
+#include <iomanip> 
+#include <ctime>
+#include <cstdlib>
+
 using json = nlohmann::json;
 
 class ApiCaller {
@@ -15,15 +20,16 @@ private:
     std::string request_url;
     std::string api_token;
 
-    json makeRequest(const std::string& endpoint);
-    json makeRequest(const std::string& endpoint, const std::map<std::string, std::string>& params);
+    json makeRequest(const std::string& endpoint) const;
+    json makeRequest(const std::string& endpoint, const std::map<std::string, std::string>& params) const;
 
 public:
     ApiCaller(const std::string& configPath);
     ApiCaller(const std::string& host, const std::string& key);
-    int safeStringToInt(const std::string& str, int defaultValue = -1);
-    json getRawTeams();
-    json getRawDailyMatchs(const std::string& date);
-    json getRawTeamsRosterById(const std::string& teamId);
-    json getRawTeamsRosterByAbbrev(const std::string& team_abbrev);
+    int safeStringToInt(const std::string& str, int defaultValue = -1) const;
+    std::string getTodaysDate() const; 
+    json getRawTeams() const;
+    json getRawDailyMatches(const std::string& date) const;
+    json getRawTeamsRosterById(const std::string& teamId) const;
+    json getRawTeamsRosterByAbbrev(const std::string& team_abbrev) const;
 };

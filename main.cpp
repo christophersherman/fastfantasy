@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include "repository/MatchRepository.hpp"
 #include "utils/api_caller.hpp"
 #include <map>
 #include <utility>
@@ -23,12 +24,15 @@ std::map<std::string, std::string> loadConfig(const std::string& filename) {
 
 int main() {
   auto config = loadConfig("config.conf");
-  TeamRepository teamRepo(config["URL"], config["KEY"]);
-  teamRepo.loadTeamFromRawData();
+  
+  //TeamRepository teamRepo(config["URL"], config["KEY"]);
+  //teamRepo.loadTeamFromRawData();
 
-  for (auto bot : teamRepo.getTeams()) {
-    teamRepo.loadTeamRosterFromRawData(bot);
-  } 
+  //for (auto bot : teamRepo.getTeams()) {
+  //  teamRepo.loadTeamRosterFromRawData(bot);
+  //} 
 
+  MatchRepository matchRepo(config["URL"], config["KEY"]);
+  matchRepo.loadDailyMatchesFromRawData();
   return 0;
 }
