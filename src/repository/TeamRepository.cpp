@@ -38,16 +38,15 @@ void TeamRepository::loadTeamFromRawData() {
 
 void TeamRepository::loadTeamRosterFromRawData(Team& team) {
     nlohmann::json response = this->api_caller.getRawTeamsRosterByAbbrev(team.getTeamAbbrev());
-    std::cout << response << std::endl;    
     if (response.contains("body") && response["body"].contains("roster") && response["body"]["roster"].is_array()){
         for(const auto& auto_team: response["body"]["roster"]){
-                /*
-                    name
-                    jersey_num
-                    position
-                    team_name
-                    age 
-                */
+            /*
+                name
+                jersey_num
+                position
+                team_name
+                age 
+            */
             if (auto_team.contains("longName") && auto_team["longName"].is_string()
                 && auto_team.contains("jerseyNum") && auto_team["jerseyNum"].is_string()
                 && auto_team.contains("team") && auto_team["team"].is_string()

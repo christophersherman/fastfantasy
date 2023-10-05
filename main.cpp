@@ -25,14 +25,14 @@ std::map<std::string, std::string> loadConfig(const std::string& filename) {
 int main() {
   auto config = loadConfig("config.conf");
   
-  //TeamRepository teamRepo(config["URL"], config["KEY"]);
-  //teamRepo.loadTeamFromRawData();
+  TeamRepository teamRepo(config["URL"], config["KEY"]);
+  teamRepo.loadTeamFromRawData();
 
   //for (auto bot : teamRepo.getTeams()) {
   //  teamRepo.loadTeamRosterFromRawData(bot);
   //} 
 
   MatchRepository matchRepo(config["URL"], config["KEY"]);
-  matchRepo.loadDailyMatchesFromRawData();
+  matchRepo.loadDailyMatchesFromRawData(teamRepo);
   return 0;
 }
