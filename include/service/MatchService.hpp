@@ -1,7 +1,7 @@
 #pragma once
 #include "domain/Match.hpp"
 #include "repository/MatchRepository.hpp"
-#include "domain/User.hpp";
+#include "domain/User.hpp"
 
 class MatchService {
 private:

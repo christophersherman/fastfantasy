@@ -1,11 +1,13 @@
 #include <iostream>
 #include <stdio.h>
 #include "repository/MatchRepository.hpp"
+#include "service/MatchService.hpp"
 #include "utils/api_caller.hpp"
 #include <map>
 #include <utility>
 #include <fstream> 
 #include "repository/TeamRepository.hpp"
+#include "service/MatchService.hpp"
 
 std::map<std::string, std::string> loadConfig(const std::string& filename) {
   std::map<std::string, std::string> config;
@@ -31,6 +33,11 @@ int main() {
   teamRepo.loadTeamAndRosterFromRawData();
 
   MatchRepository matchRepo(apic, teamRepo);
-  matchRepo.loadDailyMatchesFromRawData();
+  User sherm("sherman");
+  sherm.draftPlayer(teamRepo.getTeamByName("Bears").getPlayerFromRosterByName("Justin Fields"));
+  std::vector<User> userVec;
+  userVec.push_back(sherm); 
+  MatchService matchServ(matchRepo, userVec);
+  matchServ.checkAndProcessMatches(); 
   return 0;
 }

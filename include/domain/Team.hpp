@@ -25,4 +25,6 @@ public:
     std::string getTeamCity() const;
     std::string getTeamAbbrev() const;
     void addPlayerToRoster(Player& p);
+    const std::vector<Player>& getRoster() const;
+    Player getPlayerFromRosterByName(std::string name);
 };

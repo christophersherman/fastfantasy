@@ -1,4 +1,5 @@
 #include "domain/Team.hpp"
+#include <vector>
 
 Team::Team()
     : team_name("")
@@ -49,4 +50,17 @@ std::string Team::getTeamAbbrev() const {
 
 std::string Team::getTeamCity() const {
     return this->team_city;
+}
+
+const std::vector<Player>& Team::getRoster() const {
+    return this->roster;
+}
+
+//todo DELETE ME I AM TEMP GARBAGE 
+Player Team::getPlayerFromRosterByName(std::string name) {
+    for (Player p : this->getRoster()) {
+        if(p.getName() == name) {
+            return p;
+        }
+    }
 }

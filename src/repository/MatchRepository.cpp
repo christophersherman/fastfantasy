@@ -12,7 +12,8 @@ MatchRepository::MatchRepository(ApiCaller& api, TeamRepository& tr)
 {}
 
 void MatchRepository::loadDailyMatchesFromRawData() {
-    std::string today_date = this->api_caller.getTodaysDate(); 
+    // std::string today_date = this->api_caller.getTodaysDate();
+    std::string today_date = "20231005"; //test date 
     spdlog::info("Searching for games on the date {}", today_date); 
     nlohmann::json response = this->api_caller.getRawDailyMatches(today_date);
     if (response.contains("body") && response["body"].is_array()){
