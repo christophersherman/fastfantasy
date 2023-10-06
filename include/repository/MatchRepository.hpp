@@ -8,11 +8,11 @@
 class MatchRepository {
 
 private:
-ApiCaller api_caller;
+ApiCaller& api_caller;
 std::vector<Match> today_matches;
-
+TeamRepository& teamRepo;
 public:
-MatchRepository(const std::string& url, const std::string& key);
-void loadDailyMatchesFromRawData(const TeamRepository& teamRepo);
-const std::vector<Match> getTodaysMatches() const;
+MatchRepository(ApiCaller&, TeamRepository& tr);
+void loadDailyMatchesFromRawData();
+const std::vector<Match>& getTodaysMatches() const;
 };

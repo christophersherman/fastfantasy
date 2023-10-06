@@ -1,14 +1,15 @@
 #include "repository/TeamRepository.hpp"
 #include "domain/Team.hpp"
+#include "utils/api_caller.hpp"
 #include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
 
-TeamRepository::TeamRepository(const std::string& url, const std::string& key)
-    : api_caller(url, key)
+TeamRepository::TeamRepository(ApiCaller& api)
+    : api_caller(api) 
     {}
 
-const std::vector<Team> TeamRepository::getTeams() const {
+const std::vector<Team>& TeamRepository::getTeams() const {
     return this->teams;
 }
 

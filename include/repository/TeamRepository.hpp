@@ -14,9 +14,9 @@
 class TeamRepository {
 private:
     std::vector<Team> teams;
-    ApiCaller api_caller;
+    ApiCaller& api_caller;
 public:
-    TeamRepository(const std::string& url, const std::string& key);
+    TeamRepository(ApiCaller& api);
     void loadTeamsFromRawData(const std::map<std::string, std::string>& params = {});
     void loadTeamAndRosterFromRawData();
     void loadTeamRosterFromRawData(Team& team); 

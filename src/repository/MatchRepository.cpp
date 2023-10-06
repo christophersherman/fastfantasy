@@ -7,13 +7,12 @@
 #include <spdlog/spdlog.h>
 #include <vector>
 
-MatchRepository::MatchRepository(const std::string& url, const std::string& key)
-: api_caller(url, key)
+MatchRepository::MatchRepository(ApiCaller& api, TeamRepository& tr)
+: api_caller(api), teamRepo(tr)
 {}
 
-void MatchRepository::loadDailyMatchesFromRawData(const TeamRepository& teamRepo) {
-    //std::string today_date = this->api_caller.getTodaysDate(); 
-    std::string today_date = "20231005";
+void MatchRepository::loadDailyMatchesFromRawData() {
+    std::string today_date = this->api_caller.getTodaysDate(); 
     spdlog::info("Searching for games on the date {}", today_date); 
     nlohmann::json response = this->api_caller.getRawDailyMatches(today_date);
     if (response.contains("body") && response["body"].is_array()){
@@ -33,9 +32,12 @@ void MatchRepository::loadDailyMatchesFromRawData(const TeamRepository& teamRepo
         }
     } else {
         spdlog::error("Response body not present or not array");
+    }
+    if(this->today_matches.empty()) {
+        spdlog::info("No matches found for today, {}", today_date);
     }    
 }
 
-const std::vector<Match> MatchRepository::getTodaysMatches() const {
+const std::vector<Match>& MatchRepository::getTodaysMatches() const {
     return this->today_matches;
 }
