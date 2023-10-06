@@ -14,5 +14,5 @@ std::vector<Match> today_matches;
 public:
 MatchRepository(const std::string& url, const std::string& key);
 void loadDailyMatchesFromRawData(const TeamRepository& teamRepo);
-std::vector<Match> getTodaysMatches();
+const std::vector<Match> getTodaysMatches() const;
 };

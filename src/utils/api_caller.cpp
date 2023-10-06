@@ -47,8 +47,8 @@ json ApiCaller::makeRequest(const std::string& endpoint) const {
     return this->makeRequest(endpoint, empty_params);
 }
 
-json ApiCaller::getRawTeams() const {
-    return this->makeRequest("getNFLTeams"); 
+json ApiCaller::getRawTeams(const std::map<std::string, std::string>& params) const {
+    return this->makeRequest("getNFLTeams", params); 
 }
 
 json ApiCaller::getRawTeamsRosterById(const std::string& team_id) const {

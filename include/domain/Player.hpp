@@ -29,4 +29,6 @@ public:
     std::string getTeamName() const;
     int getJerseyNumber() const;
     int getAge() const;
+
+    bool operator==(const Player& other) const;    
 };

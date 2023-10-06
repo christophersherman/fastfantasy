@@ -5,6 +5,7 @@
 #include <iostream>
 #include <nlohmann/detail/json_pointer.hpp>
 #include <spdlog/spdlog.h>
+#include <vector>
 
 MatchRepository::MatchRepository(const std::string& url, const std::string& key)
 : api_caller(url, key)
@@ -33,4 +34,8 @@ void MatchRepository::loadDailyMatchesFromRawData(const TeamRepository& teamRepo
     } else {
         spdlog::error("Response body not present or not array");
     }    
+}
+
+const std::vector<Match> MatchRepository::getTodaysMatches() const {
+    return this->today_matches;
 }

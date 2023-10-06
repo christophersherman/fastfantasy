@@ -71,3 +71,9 @@ int Player::getAge() const
 {
     return age;
 }
+
+bool Player::operator==(const Player& other) const {
+    return (this->name == other.getName()
+            && this->position == other.getPosition()
+            && this->age == other.getAge());
+}

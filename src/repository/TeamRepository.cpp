@@ -12,8 +12,9 @@ const std::vector<Team> TeamRepository::getTeams() const {
     return this->teams;
 }
 
-void TeamRepository::loadTeamFromRawData() {
-    nlohmann::json response = this->api_caller.getRawTeams();
+void TeamRepository::loadTeamsFromRawData(const std::map<std::string, std::string>& params ){
+    //this seems out of place becuase i didnt know i could do this until too late
+    nlohmann::json response = this->api_caller.getRawTeams(params);
     
     if (response.contains("body") && response["body"].is_array()) {
         for(const auto& team : response["body"]){
@@ -27,6 +28,7 @@ void TeamRepository::loadTeamFromRawData() {
                        team["teamCity"].get<std::string>(), 
                        team["teamAbv"].get<std::string>()); 
                        
+                populateTeamRoster(t,team); 
                 this->teams.push_back(t);
                 spdlog::info("team {} saved to teamRepository", t.getTeamName());
             }
@@ -36,39 +38,51 @@ void TeamRepository::loadTeamFromRawData() {
     }
 }
 
+void TeamRepository::loadTeamAndRosterFromRawData() {
+    std::map<std::string, std::string> params; 
+    params.insert({"rosters", "true"});
+    this->loadTeamsFromRawData(params);
+}
+
+//in case you just want to load one roster? 
 void TeamRepository::loadTeamRosterFromRawData(Team& team) {
     nlohmann::json response = this->api_caller.getRawTeamsRosterByAbbrev(team.getTeamAbbrev());
     if (response.contains("body") && response["body"].contains("roster") && response["body"]["roster"].is_array()){
-        for(const auto& auto_team: response["body"]["roster"]){
-            /*
-                name
-                jersey_num
-                position
-                team_name
-                age 
-            */
-            if (auto_team.contains("longName") && auto_team["longName"].is_string()
-                && auto_team.contains("jerseyNum") && auto_team["jerseyNum"].is_string()
-                && auto_team.contains("team") && auto_team["team"].is_string()
-                && auto_team.contains("pos") && auto_team["pos"].is_string()
-                && auto_team.contains("age") && auto_team["age"].is_string()) {
-                
-                //i need a helper function to safely convert since the string can be empty for random punters or something
-                int jerseyNum = api_caller.safeStringToInt(auto_team["jerseyNum"].get<std::string>());
-                int age = api_caller.safeStringToInt(auto_team["age"].get<std::string>());
-
-                Player p(auto_team["longName"], jerseyNum, auto_team["pos"], auto_team["team"], age);
-                team.addPlayerToRoster(p);
-
-                spdlog::info("Player {} loaded into Team Roster", p.getName());
-            
-            } else {
-                spdlog::error("Unexpected Team Roster data");
-            }
-        }
+        populateTeamRoster(team, response["body"]);
     } else {
         spdlog::error("Response body not present or not array");
     }  
+}
+
+Team TeamRepository::populateTeamRoster(Team& team, nlohmann::json rosterResponse) {
+    for(const auto& auto_team: rosterResponse["Roster"]){
+        /*
+            name
+            jersey_num
+            position
+            team_name
+            age 
+        */
+        if (auto_team.contains("longName") && auto_team["longName"].is_string()
+            && auto_team.contains("jerseyNum") && auto_team["jerseyNum"].is_string()
+            && auto_team.contains("team") && auto_team["team"].is_string()
+            && auto_team.contains("pos") && auto_team["pos"].is_string()
+            && auto_team.contains("age") && auto_team["age"].is_string()) {
+            
+            //i need a helper function to safely convert since the string can be empty for random punters or something
+            int jerseyNum = api_caller.safeStringToInt(auto_team["jerseyNum"].get<std::string>());
+            int age = api_caller.safeStringToInt(auto_team["age"].get<std::string>());
+
+            Player p(auto_team["longName"], jerseyNum, auto_team["pos"], auto_team["team"], age);
+            team.addPlayerToRoster(p);
+
+            spdlog::info("Player {} loaded into Team Roster", p.getName());
+        
+        } else {
+            spdlog::error("Unexpected Team Roster data");
+        }
+    } 
+    return team;
 }
 
 Team TeamRepository::getTeamByCity(const std::string& city_name) const {

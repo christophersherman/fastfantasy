@@ -28,7 +28,7 @@ public:
     ApiCaller(const std::string& host, const std::string& key);
     int safeStringToInt(const std::string& str, int defaultValue = -1) const;
     std::string getTodaysDate() const; 
-    json getRawTeams() const;
+    json getRawTeams(const std::map<std::string, std::string>& params = {}) const;
     json getRawDailyMatches(const std::string& date) const;
     json getRawTeamsRosterById(const std::string& teamId) const;
     json getRawTeamsRosterByAbbrev(const std::string& team_abbrev) const;
