@@ -56,11 +56,11 @@ const std::vector<Player>& Team::getRoster() const {
     return this->roster;
 }
 
-//todo DELETE ME I AM TEMP GARBAGE 
-Player Team::getPlayerFromRosterByName(std::string name) {
-    for (Player p : this->getRoster()) {
+std::optional<Player> Team::getPlayerFromRosterByName(const std::string& name) const {
+    for (const Player& p : roster) {  // Use direct member access rather than getter
         if(p.getName() == name) {
             return p;
         }
     }
+    return std::nullopt;  // Player was not found
 }

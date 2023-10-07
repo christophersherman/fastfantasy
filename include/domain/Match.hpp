@@ -22,4 +22,5 @@ public:
 
     // Optional setters and other methods
     void setWeight(int w);
+
 };

@@ -2,7 +2,7 @@
 #include "../domain/Match.hpp"
 #include "../domain/Player.hpp"
 #include "../domain/Team.hpp"
-#include <cpr/cpr.h>
+#include "cpr/cpr.h"
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -32,4 +32,5 @@ public:
     json getRawDailyMatches(const std::string& date) const;
     json getRawTeamsRosterById(const std::string& teamId) const;
     json getRawTeamsRosterByAbbrev(const std::string& team_abbrev) const;
+    json getRawUpdatesForMatch(const std::map<std::string, std::string>& params) const;
 };

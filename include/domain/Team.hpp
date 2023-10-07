@@ -26,5 +26,5 @@ public:
     std::string getTeamAbbrev() const;
     void addPlayerToRoster(Player& p);
     const std::vector<Player>& getRoster() const;
-    Player getPlayerFromRosterByName(std::string name);
+    std::optional<Player> getPlayerFromRosterByName(const std::string& name) const;
 };

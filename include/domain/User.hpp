@@ -14,4 +14,5 @@ public:
     void dropPlayer(const Player& player);
     //in the future make a user service to get players via other attributes?
     const std::vector<Player>& getPlayerList() const;
+    friend bool operator<(const User& lhs, const User& rhs);
 };

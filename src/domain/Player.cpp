@@ -77,3 +77,7 @@ bool Player::operator==(const Player& other) const {
             && this->position == other.getPosition()
             && this->age == other.getAge());
 }
+
+bool operator<(const Player& lhs, const Player& rhs) {
+    return lhs.getName() < rhs.getName();  // Or however you wish to compare two Player objects
+}

@@ -1,5 +1,14 @@
 CXX = g++
-CXXFLAGS = -Iinclude -Wall -std=c++17
+CXXFLAGS = -Iinclude \
+           -I/opt/homebrew/Cellar/cpr/1.10.4/include \
+           -I/opt/homebrew/Cellar/nlohmann-json/3.11.2/include \
+           -I/opt/homebrew/Cellar/spdlog/1.12.0/include \
+           -I/opt/homebrew/Cellar/fmt/10.1.1/include \
+           -Wall -std=c++17
+
+LDFLAGS = -L/opt/homebrew/Cellar/cpr/1.10.4/lib \
+          -L/opt/homebrew/Cellar/fmt/10.1.1/lib \
+          -lcpr -lfmt
 
 # Source, object, and include directories
 SRC_DIR = src
@@ -16,7 +25,8 @@ TARGET = fastfantasy
 all: directories $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $@ -lcpr -lfmt
+	$(CXX) $(OBJS) $(LDFLAGS) -o $@
+
 
 # Rule to build object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/domain/%.cpp
@@ -34,7 +44,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/utils/%.cpp
 $(OBJ_DIR)/%.o: $(SRC_DIR)/service/%.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 
 $(OBJ_DIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

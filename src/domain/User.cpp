@@ -20,3 +20,7 @@ void User::dropPlayer(const Player& player) {
 const std::vector<Player>& User::getPlayerList() const {
     return this->playerList;
 }
+
+bool operator<(const User& lhs, const User& rhs) {
+    return lhs.name < rhs.name;
+}

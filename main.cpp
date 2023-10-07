@@ -34,7 +34,7 @@ int main() {
 
   MatchRepository matchRepo(apic, teamRepo);
   User sherm("sherman");
-  sherm.draftPlayer(teamRepo.getTeamByName("Bears").getPlayerFromRosterByName("Justin Fields"));
+  sherm.draftPlayer(teamRepo.getTeamByName("Bears").getPlayerFromRosterByName("Justin Fields").value());
   std::vector<User> userVec;
   userVec.push_back(sherm); 
   MatchService matchServ(matchRepo, userVec);

@@ -121,3 +121,6 @@ std::string ApiCaller::getTodaysDate() const {
     return std::string(buf);
 }
  
+json ApiCaller::getRawUpdatesForMatch(const std::map<std::string, std::string>& params) const {
+    return this->makeRequest("getNFLBoxScore", params);
+}

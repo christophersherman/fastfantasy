@@ -31,4 +31,6 @@ public:
     int getAge() const;
 
     bool operator==(const Player& other) const;    
+    friend bool operator<(const Player& lhs, const Player& rhs);
+
 };
