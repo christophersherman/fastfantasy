@@ -34,9 +34,17 @@ int main() {
 
   MatchRepository matchRepo(apic, teamRepo);
   User sherm("sherman");
-  sherm.draftPlayer(teamRepo.getTeamByName("Bears").getPlayerFromRosterByName("Justin Fields").value());
+  sherm.draftPlayer(teamRepo.getTeamByName("Vikings").getPlayerFromRosterByName("Kirk Cousins").value());
+  sherm.draftPlayer(teamRepo.getTeamByName("Vikings").getPlayerFromRosterByName("T.J. Hockenson").value());
+  User opp("oppy");
+  opp.draftPlayer(teamRepo.getTeamByName("Cowboys").getPlayerFromRosterByName("Dak Prescott").value());
+  opp.draftPlayer(teamRepo.getTeamByName("Jets").getPlayerFromRosterByName("Zach Wilson").value());
+  
+
   std::vector<User> userVec;
   userVec.push_back(sherm); 
+  userVec.push_back(opp); 
+
   MatchService matchServ(matchRepo, userVec);
   matchServ.checkAndProcessMatches(); 
   return 0;

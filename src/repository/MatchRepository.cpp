@@ -14,7 +14,7 @@ MatchRepository::MatchRepository(ApiCaller& api, TeamRepository& tr)
 
 void MatchRepository::loadDailyMatchesFromRawData() {
     // std::string today_date = this->api_caller.getTodaysDate();
-    std::string today_date = "20231005"; //test date 
+    std::string today_date = "20231008"; //test date 
     spdlog::info("Searching for games on the date {}", today_date); 
     nlohmann::json response = this->api_caller.getRawDailyMatches(today_date);
     if (response.contains("body") && response["body"].is_array()){
@@ -43,7 +43,7 @@ void MatchRepository::loadDailyMatchesFromRawData() {
 std::map<Player, double> MatchRepository::getPlayerStatsForMatch(const Match& m) {
     std::map<std::string, std::string> params;
     // std::string today_date = this->api_caller.getTodaysDate();
-    std::string today_date = "20231005";
+    std::string today_date = "20231008"; //test date 
     std::string concatenated = today_date + "_" + m.getTeam1().getTeamAbbrev() + "@" + m.getTeam2().getTeamAbbrev(); 
     spdlog::info("attempting to get updates for {}", "gameID" + concatenated); 
     params.insert({"gameID", concatenated}); 
@@ -74,7 +74,7 @@ std::map<Player, double> MatchRepository::getPlayerStatsForMatch(const Match& m)
 }
 //todo this function cant return null for a player?
 Match MatchRepository::getMatchForPlayer(const Player& p) {
-    for (auto m : this->getTodaysMatches()){
+    for (const auto& m : this->getTodaysMatches()){
         //idk why but the Roster results in the getTeamsAndRoster puts player team NAme as the name by abbreviation 
         if (m.getTeam1().getTeamAbbrev() == p.getTeamName() || m.getTeam2().getTeamAbbrev()== p.getTeamName()) {
             return m;

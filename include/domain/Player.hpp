@@ -34,3 +34,15 @@ public:
     friend bool operator<(const Player& lhs, const Player& rhs);
 
 };
+
+namespace std {
+    template <>
+    struct hash<Player> {
+        std::size_t operator()(const Player& player) const {
+            std::size_t h1 = std::hash<std::string>()(player.getName());
+            std::size_t h2 = std::hash<std::string>()(player.getPosition());
+            return h1 ^ (h2 << 1);  // Combine hashes
+        }
+    };
+}
+

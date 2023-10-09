@@ -15,4 +15,5 @@ void scoreMatch();
 void checkAndProcessMatches();
 double getFantasyPointsForPlayer(const Player& p); 
 void getTheScoresForAllPlayersPerUser(std::map<User, std::vector<Player>>& uatpitm);
+std::map<User, std::vector<Player>> getUsersPlayersInMatch(const Match& single_match);
 };

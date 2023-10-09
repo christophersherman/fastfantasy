@@ -1,6 +1,7 @@
 #include "service/MatchService.hpp"
 #include "repository/MatchRepository.hpp"
 #include "service/ScoreManagerService.hpp"
+#include <unordered_set>
 #include <vector>
 
 MatchService::MatchService(MatchRepository& mr, std::vector<User>& u) 
@@ -9,36 +10,39 @@ MatchService::MatchService(MatchRepository& mr, std::vector<User>& u)
     {}
 
 void MatchService::checkAndProcessMatches() {
-    this->matchRepo.loadDailyMatchesFromRawData(); 
-    const std::vector<Match>& today_matches = this->matchRepo.getTodaysMatches();        
+    this->matchRepo.loadDailyMatchesFromRawData();
+    const std::vector<Match>& today_matches = this->matchRepo.getTodaysMatches();
 
-    for (auto auto_match : today_matches)  {
-        int weight = 0; 
-        std::map<User, std::vector<Player>> usersAndTheirPlayersInTodaysMatch;
-        for (auto userBot : this->users) {
-            std::vector<Player> usersPlayersInTodaysMatch;
-            /*
-                does the user have players in the match?
-            */
-            //if Team.lookup Match.away / home roster contains user playerList 
-            const std::vector<Player>& p = auto_match.getTeam1().getRoster();
-            const std::vector<Player>& p2 = auto_match.getTeam2().getRoster();
-            std::vector<Player> concatenated(p);
-            concatenated.insert(concatenated.end(), p2.begin(), p2.end());
-            for(auto auto_user_roster_player : userBot.getPlayerList()) {
-                if(std::find(concatenated.begin(), concatenated.end(), auto_user_roster_player) != concatenated.end()) {
-                    weight++;
-                    usersPlayersInTodaysMatch.push_back(auto_user_roster_player);
-                    spdlog::info("Player {} found in today's match!", auto_user_roster_player.getName());
-                }
-            } 
-            usersAndTheirPlayersInTodaysMatch.insert({userBot, usersPlayersInTodaysMatch});
-        }
-        //call the scoreManagerService
-        //or just this function???
-        //to-do refactor and rethink this approach 
+    for (const auto& single_match : today_matches) {
+        auto usersAndTheirPlayersInTodaysMatch = getUsersPlayersInMatch(single_match);
         this->getTheScoresForAllPlayersPerUser(usersAndTheirPlayersInTodaysMatch);
     }
+}
+
+std::map<User, std::vector<Player>> MatchService::getUsersPlayersInMatch(const Match& single_match) {
+    std::map<User, std::vector<Player>> usersAndTheirPlayersInTodaysMatch;
+
+    // Create an unordered_set for quick player lookups.
+    std::unordered_set<Player> allPlayersInMatch;
+    const auto& team1Roster = single_match.getTeam1().getRoster();
+    const auto& team2Roster = single_match.getTeam2().getRoster();
+    allPlayersInMatch.insert(team1Roster.begin(), team1Roster.end());
+    allPlayersInMatch.insert(team2Roster.begin(), team2Roster.end());
+
+    for (const auto& userBot : this->users) {
+        std::vector<Player> usersPlayersInTodaysMatch;
+
+        for (const auto& player : userBot.getPlayerList()) {
+            if (allPlayersInMatch.count(player)) {
+                usersPlayersInTodaysMatch.push_back(player);
+                spdlog::info("Player {} found in today's match!", player.getName());
+            }
+        }
+
+        usersAndTheirPlayersInTodaysMatch[userBot] = usersPlayersInTodaysMatch;
+    }
+
+    return usersAndTheirPlayersInTodaysMatch;
 }
 
 void MatchService::getTheScoresForAllPlayersPerUser(std::map<User, std::vector<Player>>& uatpitm) {
